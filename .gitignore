@@ -8,3 +8,5 @@ Secrets.tar
 
 # Mint package manager
 Mint
+
+analytics/vendor/*

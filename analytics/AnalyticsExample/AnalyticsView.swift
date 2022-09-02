@@ -39,6 +39,30 @@ final class AnalyticsView: UIScrollView {
     return button
   }()
 
+  public lazy var agreeButton: UIButton = {
+    let button = UIButton()
+    button.setTitle("Agree", for: .normal)
+    button.setTitleColor(UIColor.white.highlighted, for: .highlighted)
+    button.setBackgroundImage(UIColor.systemOrange.image, for: .normal)
+    button.setBackgroundImage(UIColor.systemOrange.highlighted.image, for: .highlighted)
+    button.clipsToBounds = true
+    button.layer.cornerRadius = 16
+    button.backgroundColor = .systemOrange
+    return button
+  }()
+
+  public lazy var disagreeButton: UIButton = {
+    let button = UIButton()
+    button.setTitle("Disagree", for: .normal)
+    button.setTitleColor(UIColor.white.highlighted, for: .highlighted)
+    button.setBackgroundImage(UIColor.systemOrange.image, for: .normal)
+    button.setBackgroundImage(UIColor.systemOrange.highlighted.image, for: .highlighted)
+    button.clipsToBounds = true
+    button.layer.cornerRadius = 16
+    button.backgroundColor = .systemOrange
+    return button
+  }()
+
   public lazy var temperatureSlider: UISlider = {
     let slider = UISlider()
     slider.minimumTrackTintColor = .systemGray
@@ -184,6 +208,8 @@ final class AnalyticsView: UIScrollView {
     // MARK: - Post Button
 
     addSubview(postButton)
+    addSubview(agreeButton)
+    addSubview(disagreeButton)
   }
 
   /// Sets up an image view (and its support views) for diplaying seasons.
@@ -307,6 +333,18 @@ final class AnalyticsView: UIScrollView {
       width: insetWidth, height: 45
     )
     maxY = postButton.frame.maxY
+
+    agreeButton.frame = CGRect(
+      x: 15, y: postButton.frame.maxY + padding(.section),
+      width: insetWidth, height: 45
+    )
+    maxY = agreeButton.frame.maxY
+
+    disagreeButton.frame = CGRect(
+      x: 15, y: agreeButton.frame.maxY + padding(.section),
+      width: insetWidth, height: 45
+    )
+    maxY = disagreeButton.frame.maxY
 
     // MARK: - Content Size
 

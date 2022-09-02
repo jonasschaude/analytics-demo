@@ -79,6 +79,18 @@ class AnalyticsViewController: UIViewController {
     navigationController?.present(navController, animated: true)
   }
 
+    @objc
+    private func agreeButtonTapped() {
+        Analytics.setUserProperty("true", forName: AnalyticsUserPropertyAllowAdPersonalizationSignals)
+
+    }
+
+    @objc
+    private func disagreeButtonTapped() {
+        Analytics.setUserProperty("false", forName: AnalyticsUserPropertyAllowAdPersonalizationSignals)
+
+    }
+
   // MARK: - Private Helpers
 
   private func configureControls() {
@@ -117,6 +129,18 @@ class AnalyticsViewController: UIViewController {
       action: #selector(buttonTapped),
       for: .touchUpInside
     )
+
+      analyticsView.agreeButton.addTarget(
+        self,
+        action: #selector(agreeButtonTapped),
+        for: .touchUpInside
+      )
+
+      analyticsView.disagreeButton.addTarget(
+        self,
+        action: #selector(disagreeButtonTapped),
+        for: .touchUpInside
+      )
   }
 
   private func configureNavigationBar() {
