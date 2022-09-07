@@ -29,7 +29,7 @@ final class AnalyticsView: UIScrollView {
 
   public lazy var postButton: UIButton = {
     let button = UIButton()
-    button.setTitle("Post about the weather", for: .normal)
+    button.setTitle("Fire view_item event", for: .normal)
     button.setTitleColor(UIColor.white.highlighted, for: .highlighted)
     button.setBackgroundImage(UIColor.systemOrange.image, for: .normal)
     button.setBackgroundImage(UIColor.systemOrange.highlighted.image, for: .highlighted)
@@ -41,7 +41,7 @@ final class AnalyticsView: UIScrollView {
 
   public lazy var agreeButton: UIButton = {
     let button = UIButton()
-    button.setTitle("Agree", for: .normal)
+    button.setTitle("Fire AnalyticsUserPropertyAllowAdPersonalizationSignals=true", for: .normal)
     button.setTitleColor(UIColor.white.highlighted, for: .highlighted)
     button.setBackgroundImage(UIColor.systemOrange.image, for: .normal)
     button.setBackgroundImage(UIColor.systemOrange.highlighted.image, for: .highlighted)
@@ -53,7 +53,7 @@ final class AnalyticsView: UIScrollView {
 
   public lazy var disagreeButton: UIButton = {
     let button = UIButton()
-    button.setTitle("Disagree", for: .normal)
+    button.setTitle("Fire AnalyticsUserPropertyAllowAdPersonalizationSignals=false", for: .normal)
     button.setTitleColor(UIColor.white.highlighted, for: .highlighted)
     button.setBackgroundImage(UIColor.systemOrange.image, for: .normal)
     button.setBackgroundImage(UIColor.systemOrange.highlighted.image, for: .highlighted)
@@ -106,6 +106,7 @@ final class AnalyticsView: UIScrollView {
     setupSubviews()
   }
 
+  @available(*, unavailable)
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -113,97 +114,98 @@ final class AnalyticsView: UIScrollView {
   // MARK: - Subviews Setup
 
   private func setupSubviews() {
-    /// Adds a description label under navigation bar.
-    descriptionLabel = buildLabel(
-      text: "Interact with the various controls to start collecting analytics data.",
-      textColor: .secondaryLabel, numberOfLines: 2
-    )
-    addSubview(descriptionLabel)
+    /*
+     /// Adds a description label under navigation bar.
+     descriptionLabel = buildLabel(
+       text: "Interact with the various controls to start collecting analytics data.",
+       textColor: .secondaryLabel, numberOfLines: 2
+     )
+     addSubview(descriptionLabel)
 
-    // MARK: - User Properties Controls
+     // MARK: - User Properties Controls
 
-    /// Label for the `Set user properties` section.
-    userPropertiesLabel = buildLabel(
-      text: "Set user properties",
-      font: .preferredFont(forTextStyle: .title3)
-    )
-    addSubview(userPropertiesLabel)
+     /// Label for the `Set user properties` section.
+     userPropertiesLabel = buildLabel(
+       text: "Set user properties",
+       font: .preferredFont(forTextStyle: .title3)
+     )
+     addSubview(userPropertiesLabel)
 
-    // MARK: - User's Favorite Season UISegmentedControl & UIImageView
+     // MARK: - User's Favorite Season UISegmentedControl & UIImageView
 
-    /// Adds a `UISegmentedControl` so users can select their favorite season.
-    seasonPicker = UISegmentedControl(items: ["Spring", "Summer", "Autumn", "Winter"])
-    seasonPicker.translatesAutoresizingMaskIntoConstraints = false
-    addSubview(seasonPicker)
+     /// Adds a `UISegmentedControl` so users can select their favorite season.
+     seasonPicker = UISegmentedControl(items: ["Spring", "Summer", "Autumn", "Winter"])
+     seasonPicker.translatesAutoresizingMaskIntoConstraints = false
+     addSubview(seasonPicker)
 
-    /// Sets up the `UIImageView` for the `seasonPicker`.
-    setupImageViewSection()
+     /// Sets up the `UIImageView` for the `seasonPicker`.
+     setupImageViewSection()
 
-    // MARK: - Preferred Temperature Units (°C or °F) UISegmentedControl
+     // MARK: - Preferred Temperature Units (°C or °F) UISegmentedControl
 
-    /// Static `UILabel` associated with `preferredTemperatureFeelPicker`.
-    unitsLabel = buildLabel(text: "Preferred Temperature Units:", textColor: .secondaryLabel)
-    addSubview(unitsLabel)
+     /// Static `UILabel` associated with `preferredTemperatureFeelPicker`.
+     unitsLabel = buildLabel(text: "Preferred Temperature Units:", textColor: .secondaryLabel)
+     addSubview(unitsLabel)
 
-    /// Adds a `UISegmentedControl` so users can select their preferred temperature units.
-    preferredUnitsPicker = UISegmentedControl(items: ["°C", "°F"])
-    addSubview(preferredUnitsPicker)
+     /// Adds a `UISegmentedControl` so users can select their preferred temperature units.
+     preferredUnitsPicker = UISegmentedControl(items: ["°C", "°F"])
+     addSubview(preferredUnitsPicker)
 
-    // MARK: - Log Events Controls
+     // MARK: - Log Events Controls
 
-    /// Label for the `Log user interactions with events` section.
-    logEventsLabel = buildLabel(text: "Log user interactions with events",
-                                font: .preferredFont(forTextStyle: .title3))
-    addSubview(logEventsLabel)
+     /// Label for the `Log user interactions with events` section.
+     logEventsLabel = buildLabel(text: "Log user interactions with events",
+                                 font: .preferredFont(forTextStyle: .title3))
+     addSubview(logEventsLabel)
 
-    // MARK: - Preferred Temperature Feel (Hot or Cold) UISegmentedControl
+     // MARK: - Preferred Temperature Feel (Hot or Cold) UISegmentedControl
 
-    /// Static `UILabel` associated with `preferredTemperatureFeelPicker`.
-    preferredTemperatureFeelLabel = buildLabel(
-      text: "Hot or cold weather?",
-      textColor: .secondaryLabel
-    )
-    addSubview(preferredTemperatureFeelLabel)
+     /// Static `UILabel` associated with `preferredTemperatureFeelPicker`.
+     preferredTemperatureFeelLabel = buildLabel(
+       text: "Hot or cold weather?",
+       textColor: .secondaryLabel
+     )
+     addSubview(preferredTemperatureFeelLabel)
 
-    /// Adds a `UISegmentedControl` so users can select from a pair of weather conditions.
-    preferredTemperatureFeelPicker = UISegmentedControl(items: ["Hot", "Cold"])
-    preferredTemperatureFeelPicker.translatesAutoresizingMaskIntoConstraints = false
-    addSubview(preferredTemperatureFeelPicker)
+     /// Adds a `UISegmentedControl` so users can select from a pair of weather conditions.
+     preferredTemperatureFeelPicker = UISegmentedControl(items: ["Hot", "Cold"])
+     preferredTemperatureFeelPicker.translatesAutoresizingMaskIntoConstraints = false
+     addSubview(preferredTemperatureFeelPicker)
 
-    // MARK: - Preferred Conditions (Rainy or Sunny) UISegmentedControl
+     // MARK: - Preferred Conditions (Rainy or Sunny) UISegmentedControl
 
-    /// Static `UILabel` associated with `preferredConditionsPicker`.
-    preferredConditionsPickerLabel = buildLabel(
-      text: "Rainy or sunny days?",
-      textColor: .secondaryLabel
-    )
-    addSubview(preferredConditionsPickerLabel)
+     /// Static `UILabel` associated with `preferredConditionsPicker`.
+     preferredConditionsPickerLabel = buildLabel(
+       text: "Rainy or sunny days?",
+       textColor: .secondaryLabel
+     )
+     addSubview(preferredConditionsPickerLabel)
 
-    /// Adds a `UISegmentedControl` so users can select whether a day was `Rainy` or `Sunny`.
-    preferredConditionsPicker = UISegmentedControl(items: ["Rainy", "Sunny"])
-    preferredConditionsPicker.translatesAutoresizingMaskIntoConstraints = false
-    addSubview(preferredConditionsPicker)
+     /// Adds a `UISegmentedControl` so users can select whether a day was `Rainy` or `Sunny`.
+     preferredConditionsPicker = UISegmentedControl(items: ["Rainy", "Sunny"])
+     preferredConditionsPicker.translatesAutoresizingMaskIntoConstraints = false
+     addSubview(preferredConditionsPicker)
 
-    // MARK: - Preferred Temperature UISlider
+     // MARK: - Preferred Temperature UISlider
 
-    /// Static `UILabel` associated with `temperatureSlider`.
-    preferredTemperatureLabel = buildLabel(
-      text: "Preferred temperature:",
-      textColor: .secondaryLabel
-    )
-    addSubview(preferredTemperatureLabel)
+     /// Static `UILabel` associated with `temperatureSlider`.
+     preferredTemperatureLabel = buildLabel(
+       text: "Preferred temperature:",
+       textColor: .secondaryLabel
+     )
+     addSubview(preferredTemperatureLabel)
 
-    /// `UILabel` representing current value of `temperatureSlider`.
-    sliderTemperatureLabel = buildLabel(
-      text: "0°",
-      font: .boldSystemFont(ofSize: 22),
-      textColor: .label,
-      textAlignment: .right
-    )
-    addSubview(sliderTemperatureLabel)
+     /// `UILabel` representing current value of `temperatureSlider`.
+     sliderTemperatureLabel = buildLabel(
+       text: "0°",
+       font: .boldSystemFont(ofSize: 22),
+       textColor: .label,
+       textAlignment: .right
+     )
+     addSubview(sliderTemperatureLabel)
 
-    /// A `UISlider` representing a user's preferred temperature.
-    addSubview(temperatureSlider)
+     /// A `UISlider` representing a user's preferred temperature.
+     addSubview(temperatureSlider)*/
 
     // MARK: - Post Button
 
@@ -249,7 +251,8 @@ final class AnalyticsView: UIScrollView {
   /// - Returns: A label that has been configured based on the passed in parameters.
   private func buildLabel(text: String, font: UIFont = .preferredFont(forTextStyle: .body),
                           textColor: UIColor = .label, numberOfLines: Int = 1,
-                          textAlignment: NSTextAlignment = .left) -> UILabel {
+                          textAlignment: NSTextAlignment = .left) -> UILabel
+  {
     let label = UILabel()
     label.translatesAutoresizingMaskIntoConstraints = false
     label.text = text
@@ -262,74 +265,74 @@ final class AnalyticsView: UIScrollView {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    /*
+     descriptionLabel.frame = CGRect(
+       x: xOrigin, y: safeAreaInsets.top,
+       width: insetWidth, height: 50
+     )
+     userPropertiesLabel.frame = CGRect(
+       x: xOrigin, y: descriptionLabel.frame.maxY + padding(.element),
+       width: insetWidth, height: 25
+     )
+     seasonPicker.frame = CGRect(
+       x: xOrigin, y: userPropertiesLabel.frame.maxY + padding(.pair),
+       width: insetWidth, height: 40
+     )
+     imageViewBackgroundView.frame = CGRect(
+       x: xOrigin, y: seasonPicker.frame.maxY + padding(.pair),
+       width: insetWidth, height: 0.22 * height
+     )
 
-    descriptionLabel.frame = CGRect(
-      x: xOrigin, y: safeAreaInsets.top,
-      width: insetWidth, height: 50
-    )
-    userPropertiesLabel.frame = CGRect(
-      x: xOrigin, y: descriptionLabel.frame.maxY + padding(.element),
-      width: insetWidth, height: 25
-    )
-    seasonPicker.frame = CGRect(
-      x: xOrigin, y: userPropertiesLabel.frame.maxY + padding(.pair),
-      width: insetWidth, height: 40
-    )
-    imageViewBackgroundView.frame = CGRect(
-      x: xOrigin, y: seasonPicker.frame.maxY + padding(.pair),
-      width: insetWidth, height: 0.22 * height
-    )
+     backgroundLabel.sizeToFit()
+     backgroundLabel.center = imageViewBackgroundView.center
 
-    backgroundLabel.sizeToFit()
-    backgroundLabel.center = imageViewBackgroundView.center
+     seasonImageView.frame = CGRect(
+       x: xOrigin, y: seasonPicker.frame.maxY + padding(.pair),
+       width: insetWidth, height: 0.22 * height
+     )
+     unitsLabel.frame = CGRect(
+       x: xOrigin, y: seasonImageView.frame.maxY + padding(.element),
+       width: insetWidth - 90, height: 30
+     )
+     preferredUnitsPicker.frame = CGRect(
+       x: frame.width - 95, y: seasonImageView.frame.maxY + padding(.element),
+       width: 80, height: 40
+     )
+     logEventsLabel.frame = CGRect(
+       x: xOrigin, y: unitsLabel.frame.maxY + padding(.element),
+       width: insetWidth, height: 25
+     )
+     preferredTemperatureFeelLabel.frame = CGRect(
+       x: xOrigin, y: logEventsLabel.frame.maxY + padding(.pair),
+       width: insetWidth - 75, height: 30
+     )
+     preferredTemperatureFeelPicker.frame = CGRect(
+       x: frame.width - 115, y: logEventsLabel.frame.maxY + padding(.pair),
+       width: 100, height: 40
+     )
+     preferredConditionsPickerLabel.frame = CGRect(
+       x: xOrigin, y: preferredTemperatureFeelPicker.frame.maxY + padding(.pair),
+       width: insetWidth - 75, height: 30
+     )
+     preferredConditionsPicker.frame = CGRect(
+       x: frame.width - 115, y: preferredConditionsPickerLabel.frame.minY,
+       width: 100, height: 40
+     )
+     preferredTemperatureLabel.frame = CGRect(
+       x: xOrigin, y: preferredConditionsPickerLabel.frame.maxY + 10, width: insetWidth - 75,
+       height: 30
+     )
+     sliderTemperatureLabel.frame = CGRect(
+       x: frame.width - 65, y: preferredConditionsPickerLabel.frame.maxY + 10, width: 50, height: 30
+     )
+     temperatureSlider.frame = CGRect(
+       origin: CGPoint(x: xOrigin, y: preferredTemperatureLabel.frame.maxY + padding(.section)),
+       size: CGSize(width: insetWidth, height: 20)
+     )*/
 
-    seasonImageView.frame = CGRect(
-      x: xOrigin, y: seasonPicker.frame.maxY + padding(.pair),
-      width: insetWidth, height: 0.22 * height
-    )
-    unitsLabel.frame = CGRect(
-      x: xOrigin, y: seasonImageView.frame.maxY + padding(.element),
-      width: insetWidth - 90, height: 30
-    )
-    preferredUnitsPicker.frame = CGRect(
-      x: frame.width - 95, y: seasonImageView.frame.maxY + padding(.element),
-      width: 80, height: 40
-    )
-    logEventsLabel.frame = CGRect(
-      x: xOrigin, y: unitsLabel.frame.maxY + padding(.element),
-      width: insetWidth, height: 25
-    )
-    preferredTemperatureFeelLabel.frame = CGRect(
-      x: xOrigin, y: logEventsLabel.frame.maxY + padding(.pair),
-      width: insetWidth - 75, height: 30
-    )
-    preferredTemperatureFeelPicker.frame = CGRect(
-      x: frame.width - 115, y: logEventsLabel.frame.maxY + padding(.pair),
-      width: 100, height: 40
-    )
-    preferredConditionsPickerLabel.frame = CGRect(
-      x: xOrigin, y: preferredTemperatureFeelPicker.frame.maxY + padding(.pair),
-      width: insetWidth - 75, height: 30
-    )
-    preferredConditionsPicker.frame = CGRect(
-      x: frame.width - 115, y: preferredConditionsPickerLabel.frame.minY,
-      width: 100, height: 40
-    )
-    preferredTemperatureLabel.frame = CGRect(
-      x: xOrigin, y: preferredConditionsPickerLabel.frame.maxY + 10, width: insetWidth - 75,
-      height: 30
-    )
-    sliderTemperatureLabel.frame = CGRect(
-      x: frame.width - 65, y: preferredConditionsPickerLabel.frame.maxY + 10, width: 50, height: 30
-    )
-    temperatureSlider.frame = CGRect(
-      origin: CGPoint(x: xOrigin, y: preferredTemperatureLabel.frame.maxY + padding(.section)),
-      size: CGSize(width: insetWidth, height: 20)
-    )
-
-    var maxY: CGFloat = temperatureSlider.frame.maxY
+    var maxY: CGFloat = safeAreaInsets.top
     postButton.frame = CGRect(
-      x: 15, y: temperatureSlider.frame.maxY + padding(.section),
+      x: 15, y: safeAreaInsets.top + padding(.section),
       width: insetWidth, height: 45
     )
     maxY = postButton.frame.maxY

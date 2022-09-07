@@ -12,148 +12,145 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import UIKit
 import FirebaseAnalytics
+import UIKit
 
 class AnalyticsViewController: UIViewController {
-  private lazy var analyticsView = AnalyticsView(frame: view.frame)
+    private lazy var analyticsView = AnalyticsView(frame: view.frame)
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    configureNavigationBar()
-    view.addSubview(analyticsView)
-    analyticsView.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      analyticsView.topAnchor.constraint(equalTo: view.topAnchor),
-      analyticsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      analyticsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      analyticsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-    ])
-    configureControls()
-  }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureNavigationBar()
+        view.addSubview(analyticsView)
+        analyticsView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            analyticsView.topAnchor.constraint(equalTo: view.topAnchor),
+            analyticsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            analyticsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            analyticsView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        ])
+        configureControls()
+    }
 
-  // MARK: - Firebase 🔥
+    // MARK: - Firebase 🔥
 
-  // MARK: Set User Properties
+    // MARK: Set User Properties
 
-  @objc
-  private func seasonDidChange(_ control: UISegmentedControl) {
-    let season = control.titleForSegment(at: control.selectedSegmentIndex)!
-    analyticsView.seasonImageView.image = UIImage(named: season)
-    Analytics.setUserProperty(season, forName: "favorite_season") // 🔥
-  }
+    @objc
+    private func seasonDidChange(_ control: UISegmentedControl) {
+        let season = control.titleForSegment(at: control.selectedSegmentIndex)!
+        analyticsView.seasonImageView.image = UIImage(named: season)
+        // Analytics.setUserProperty(season, forName: "favorite_season") // 🔥
+    }
 
-  @objc
-  private func unitsDidChange(_ control: UISegmentedControl) {
-    let preferredUnits = control.titleForSegment(at: control.selectedSegmentIndex)!
-    Analytics.setUserProperty(preferredUnits, forName: "preferred_units") // 🔥
-  }
+    @objc
+    private func unitsDidChange(_ control: UISegmentedControl) {
+        let preferredUnits = control.titleForSegment(at: control.selectedSegmentIndex)!
+        // Analytics.setUserProperty(preferredUnits, forName: "preferred_units") // 🔥
+    }
 
-  // MARK: Event Logging
+    // MARK: Event Logging
 
-  @objc
-  private func preferredTemperatureFeelDidChange(_ control: UISegmentedControl) {
-    let temperatureFeelPreference = control.titleForSegment(at: control.selectedSegmentIndex)!
-    Analytics.logEvent("hot_or_cold_switch", parameters: ["value": temperatureFeelPreference]) // 🔥
-  }
+    @objc
+    private func preferredTemperatureFeelDidChange(_ control: UISegmentedControl) {
+        let temperatureFeelPreference = control.titleForSegment(at: control.selectedSegmentIndex)!
+        Analytics.logEvent("hot_or_cold_switch", parameters: ["value": temperatureFeelPreference]) // 🔥
+    }
 
-  @objc
-  private func preferredConditionsDidChange(_ control: UISegmentedControl) {
-    let conditionsPreference = control.titleForSegment(at: control.selectedSegmentIndex)!
-    Analytics.logEvent("rainy_or_sunny_switch", parameters: ["value": conditionsPreference]) // 🔥
-  }
+    @objc
+    private func preferredConditionsDidChange(_ control: UISegmentedControl) {
+        let conditionsPreference = control.titleForSegment(at: control.selectedSegmentIndex)!
+        Analytics.logEvent("rainy_or_sunny_switch", parameters: ["value": conditionsPreference]) // 🔥
+    }
 
-  @objc
-  private func sliderDidChange(_ control: UISlider) {
-    let value = Int(control.value)
-    analyticsView.sliderTemperatureLabel.text = "\(value)°"
-    Analytics.logEvent("preferred_temperature_changed", parameters: ["preference": value]) // 🔥
-  }
+    @objc
+    private func sliderDidChange(_ control: UISlider) {
+        let value = Int(control.value)
+        analyticsView.sliderTemperatureLabel.text = "\(value)°"
+        Analytics.logEvent("preferred_temperature_changed", parameters: ["preference": value]) // 🔥
+    }
 
-  @objc
-  private func buttonTapped() {
-    Analytics.logEvent("blog_button_tapped", parameters: nil) // 🔥
-    let blogViewController = BlogViewController()
-    blogViewController.delegate = self
-    let navController = UINavigationController(rootViewController: blogViewController)
-    navigationController?.present(navController, animated: true)
-  }
+    @objc
+    private func buttonTapped() {
+        print("fire view_item event")
+        Analytics.logEvent("view_item", parameters: ["item_category": "HEIMTEXTILIEN", "item_name": "Home affaire Handtuch Set", "item_id": "45451046"])
+    }
 
     @objc
     private func agreeButtonTapped() {
+        print("fire AnalyticsUserPropertyAllowAdPersonalizationSignals=true event")
         Analytics.setUserProperty("true", forName: AnalyticsUserPropertyAllowAdPersonalizationSignals)
-
     }
 
     @objc
     private func disagreeButtonTapped() {
+        print("fire AnalyticsUserPropertyAllowAdPersonalizationSignals=false event")
         Analytics.setUserProperty("false", forName: AnalyticsUserPropertyAllowAdPersonalizationSignals)
-
     }
 
-  // MARK: - Private Helpers
+    // MARK: - Private Helpers
 
-  private func configureControls() {
-    analyticsView.seasonPicker.addTarget(
-      self,
-      action: #selector(seasonDidChange(_:)),
-      for: .valueChanged
-    )
+    private func configureControls() {
+        /* analyticsView.seasonPicker.addTarget(
+           self,
+           action: #selector(seasonDidChange(_:)),
+           for: .valueChanged
+         )
 
-    analyticsView.preferredUnitsPicker.addTarget(
-      self,
-      action: #selector(unitsDidChange(_:)),
-      for: .valueChanged
-    )
+         analyticsView.preferredUnitsPicker.addTarget(
+           self,
+           action: #selector(unitsDidChange(_:)),
+           for: .valueChanged
+         )
 
-    analyticsView.temperatureSlider.addTarget(
-      self,
-      action: #selector(sliderDidChange(_:)),
-      for: .valueChanged
-    )
+         analyticsView.temperatureSlider.addTarget(
+           self,
+           action: #selector(sliderDidChange(_:)),
+           for: .valueChanged
+         )
 
-    analyticsView.preferredTemperatureFeelPicker.addTarget(
-      self,
-      action: #selector(preferredTemperatureFeelDidChange(_:)),
-      for: .valueChanged
-    )
+         analyticsView.preferredTemperatureFeelPicker.addTarget(
+           self,
+           action: #selector(preferredTemperatureFeelDidChange(_:)),
+           for: .valueChanged
+         )
 
-    analyticsView.preferredConditionsPicker.addTarget(
-      self,
-      action: #selector(preferredConditionsDidChange(_:)),
-      for: .valueChanged
-    )
+         analyticsView.preferredConditionsPicker.addTarget(
+           self,
+           action: #selector(preferredConditionsDidChange(_:)),
+           for: .valueChanged
+         ) */
 
-    analyticsView.postButton.addTarget(
-      self,
-      action: #selector(buttonTapped),
-      for: .touchUpInside
-    )
+        analyticsView.postButton.addTarget(
+            self,
+            action: #selector(buttonTapped),
+            for: .touchUpInside
+        )
 
-      analyticsView.agreeButton.addTarget(
-        self,
-        action: #selector(agreeButtonTapped),
-        for: .touchUpInside
-      )
+        analyticsView.agreeButton.addTarget(
+            self,
+            action: #selector(agreeButtonTapped),
+            for: .touchUpInside
+        )
 
-      analyticsView.disagreeButton.addTarget(
-        self,
-        action: #selector(disagreeButtonTapped),
-        for: .touchUpInside
-      )
-  }
+        analyticsView.disagreeButton.addTarget(
+            self,
+            action: #selector(disagreeButtonTapped),
+            for: .touchUpInside
+        )
+    }
 
-  private func configureNavigationBar() {
-    navigationItem.title = "Firebase Analytics"
-    guard let navigationBar = navigationController?.navigationBar else { return }
-    navigationBar.prefersLargeTitles = true
-    navigationBar.titleTextAttributes = [.foregroundColor: UIColor.systemOrange]
-    navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.systemOrange]
-  }
+    private func configureNavigationBar() {
+        navigationItem.title = "Firebase Analytics"
+        guard let navigationBar = navigationController?.navigationBar else { return }
+        navigationBar.prefersLargeTitles = true
+        navigationBar.titleTextAttributes = [.foregroundColor: UIColor.systemOrange]
+        navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.systemOrange]
+    }
 }
 
 extension AnalyticsViewController: BlogViewControllerDelegate {
-  func dismiss(animated: Bool) {
-    navigationController?.dismiss(animated: animated, completion: nil)
-  }
+    func dismiss(animated: Bool) {
+        navigationController?.dismiss(animated: animated, completion: nil)
+    }
 }
